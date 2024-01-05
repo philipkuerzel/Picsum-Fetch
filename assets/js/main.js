@@ -7,11 +7,6 @@ document.body.appendChild(h1);
 let gallery = document.createElement("section");
 document.body.appendChild(gallery);
 
-let loadMoreBtn = document.createElement("button");
-loadMoreBtn.textContent = "Load More";
-loadMoreBtn.className = "loadMoreBtn";
-document.body.appendChild(loadMoreBtn);
-
 function fetchAndDisplayImages() {
     fetch(`https://picsum.photos/v2/list?page=${page}`)
         .then((response) => response.json())
@@ -48,9 +43,11 @@ function fetchAndDisplayImages() {
         .catch((error) => console.log("Sorry ich kann nicht mehr :D", error));
 }
 
-loadMoreBtn.addEventListener("click", () => {
-    page++;
-    fetchAndDisplayImages();
-});
+window.onscroll = function () {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        page++;
+        fetchAndDisplayImages();
+    }
+};
 
 fetchAndDisplayImages();
