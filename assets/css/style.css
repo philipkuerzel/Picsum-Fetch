@@ -37,3 +37,14 @@ button:hover {
     background-color: rgb(255, 94, 0);
     cursor: pointer;
 }
+
+body {
+    text-align: center;
+}
+
+.loadMoreBtn {
+    font-size: 1.23rem;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    padding: 10px;
+}

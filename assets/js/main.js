@@ -1,40 +1,56 @@
-let h1 = document.createElement("h1") // h1 für Überschrift
-    h1.textContent = "Picsum Fetch"
-    document.body.appendChild(h1)
+let page = 1;
 
-let gallery = document.createElement("section") // section für Bildergallery
-    document.body.appendChild(gallery)
+let h1 = document.createElement("h1");
+h1.textContent = "Picsum Fetch";
+document.body.appendChild(h1);
 
-fetch("https://picsum.photos/v2/list")
-.then((response) => response.json())
-.then((data) => {
-    console.log(data)
+let gallery = document.createElement("section");
+document.body.appendChild(gallery);
 
-    data.forEach((element) => {
-        const imgAuthor = element.author
-        const imgSrc = element.download_url
-        const imgUrl = element.url
-        
-        let imgDiv = document.createElement("div")  // div erstellen für figure und button
-        let imgBox = document.createElement("figure")// figure für Bilder erstellen
-        imgDiv.appendChild(imgBox)
-        
-        let img = document.createElement("img") // img erstellen
-        img.setAttribute("src", imgSrc)
-        img.setAttribute("alt", imgUrl)
-        imgBox.appendChild(img) //img zu figure hinzufügen
+let loadMoreBtn = document.createElement("button");
+loadMoreBtn.textContent = "Load More";
+loadMoreBtn.className = "loadMoreBtn";
+document.body.appendChild(loadMoreBtn);
 
-        let authorName = document.createElement("figcaption") // figcaption erstellen um Name des Authors anzuzeigen
-        authorName.textContent = imgAuthor
-        imgBox.appendChild(authorName)  // figcaption zu figure hinzufügen
+function fetchAndDisplayImages() {
+    fetch(`https://picsum.photos/v2/list?page=${page}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
 
-        let seeMoreBtn = document.createElement("button") // button erstellen um Details anzuzeigen durch Weiterleitung
-        seeMoreBtn.textContent = "SeeMore"
-        seeMoreBtn.addEventListener("click", () => {
-            window.open(imgUrl, "_blank")
+            data.forEach((element) => {
+                const imgAuthor = element.author;
+                const imgSrc = element.download_url;
+                const imgUrl = element.url;
+
+                let imgDiv = document.createElement("div");
+                let imgBox = document.createElement("figure");
+                imgDiv.appendChild(imgBox);
+
+                let img = document.createElement("img");
+                img.setAttribute("src", imgSrc);
+                img.setAttribute("alt", imgUrl);
+                imgBox.appendChild(img);
+
+                let authorName = document.createElement("figcaption");
+                authorName.textContent = imgAuthor;
+                imgBox.appendChild(authorName);
+
+                let seeMoreBtn = document.createElement("button");
+                seeMoreBtn.textContent = "See More";
+                seeMoreBtn.addEventListener("click", () => {
+                    window.open(imgUrl, "_blank");
+                });
+                imgDiv.appendChild(seeMoreBtn);
+                gallery.appendChild(imgDiv);
+            });
         })
-        imgDiv.appendChild(seeMoreBtn)  //button zu div hinzufügen
-        gallery.appendChild(imgDiv) //div zur Hauptgallery hinzufügen
-    });
-})
-    .catch((error) => console.log("Sorry ich kann nicht mehr :D",error))
+        .catch((error) => console.log("Sorry ich kann nicht mehr :D", error));
+}
+
+loadMoreBtn.addEventListener("click", () => {
+    page++;
+    fetchAndDisplayImages();
+});
+
+fetchAndDisplayImages();
